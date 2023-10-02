@@ -11,13 +11,8 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            //DTO :Data Transformation Object
-            //ProductTest();
-            //CategoryTest();
-
-            ProductDetailsDtoTest();
-
-
+            ProductTest();
+            //ProductDetailsDtoTest();
 
 
         }
@@ -40,26 +35,26 @@ namespace ConsoleUI
         private static void ProductTest()
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
-
-            foreach (var product in productManager.GetAll())
+            var result = productManager.GetProductDetails();
+            if(result.Success==true)
             {
-                Console.WriteLine(product.ProductName);
+                foreach (var product in result.Data)
+                {
+                    Console.WriteLine(product.ProductName + " / " + product.CategoryName);
+                }
             }
-            foreach (var product in productManager.GetAllByCategoryId(2))
+            else
             {
-                Console.WriteLine(product.ProductName);
+                Console.WriteLine(result.Message);
             }
-            foreach (var product in productManager.GetByUnitPrice(50, 100))
-            {
-                Console.WriteLine(product.ProductName);
-            }
+            
         }
 
         private static void ProductDetailsDtoTest()
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
 
-            foreach (var product in productManager.GetProductDetails())
+            foreach (var product in productManager.GetProductDetails().Data)
             {
                 Console.WriteLine(product.ProductName + "/" + product.CategoryName);
             }
