@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -25,21 +26,18 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            //Ürünü eklemeden önce eğer bir kural varsa onlar buraya yazılır. Her şey geçerli ise ekleme yapar.
-            //Validation -- yapısal olarak uygulanıp uygulanmadığına karar veriyor. Örneğin sisteme kayıt olunca minimum şu kadar karakter olmalı gibi kurallara doğrulama deniliyor.
-
-            ValidationTool.Validate(new ProductValidator(), product);
+            //business codes
             _productDal.Add(product);
-
             return new Result(true,Messages.ProductAddedd);
         }
 
         public IDataResult<List<Product>> GetAll()
         {
             //İş Kodları
-            if (DateTime.Now.Hour == 2)
+            if (DateTime.Now.Hour == 1)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
