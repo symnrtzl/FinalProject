@@ -29,6 +29,8 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+        //Claim --> mesela admin
+        //[SecuredOpration("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
