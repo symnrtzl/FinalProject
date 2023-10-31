@@ -17,6 +17,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+//builder.Services.AddSingleton<IProductService, ProductManager>();
+//builder.Services.AddSingleton<IProductDal, EfProductDal>();
+// IOC Container Autofac yapýlandýrmasý
+builder.Host
+       .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+       .ConfigureContainer<ContainerBuilder>(builder =>
+       {
+           builder.RegisterModule(new AutofacBusinessModule());
+       });
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -35,24 +49,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
                 });
 ServiceTool.Create(builder.Services);
-
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-//builder.Services.AddSingleton<IProductService, ProductManager>();
-//builder.Services.AddSingleton<IProductDal, EfProductDal>();
-// IOC Container Autofac yapýlandýrmasý
-builder.Host
-       .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-       .ConfigureContainer<ContainerBuilder>(builder =>
-       {
-           builder.RegisterModule(new AutofacBusinessModule());
-       });
-
-
 
 var app = builder.Build();
 
