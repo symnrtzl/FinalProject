@@ -21,9 +21,11 @@ namespace WebAPI.Controllers
             _productService = productService;
         }
 
+
         [HttpGet("getall")]
         public IActionResult Get()
         {
+            Thread.Sleep(5000);
             
             var result=_productService.GetAll();
             if(result.Success) 
